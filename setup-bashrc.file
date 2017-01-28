@@ -1,0 +1,55 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+function parse_git_branch () {
+  if [[ -z $(git status --porcelain) ]]; then
+   echo -ne "\001\033[00;32m\002"
+  else
+   echo -ne "\001\033[01;31m\002"
+  fi
+  BRANCH=`git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+  echo -n $BRANCH
+  REMOTE=`git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)`
+  if [ "$REMOTE" != "" ]; then
+    AHEAD=`git rev-list $REMOTE..HEAD | wc -l` # when git 1.8 becomes available: --count instead of wc
+    BEHIND=`git rev-list HEAD..$REMOTE | wc -l`
+    if [ "$BEHIND" != "0" ]; then echo -ne "\001\033[01;31m\002-$BEHIND"; fi
+    if [ "$AHEAD" != "0" ]; then echo -ne "\001\033[01;32m\002+$AHEAD"; fi
+  fi
+}
+alias __ps1_gitstat='echo -en "\001\033[01;33m\002[`parse_git_branch`\001\033[01;33m\002] "'
+
+PS1="\[\033[01;31m\]\h \[\033[01;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[01;32m\]:)'; else echo '\[\033[01;31m\]:('; fi\` \`git rev-parse 2>/dev/null && __ps1_gitstat\`\[\033[00m\]\$ "
+function gitoff () {
+ PS1="\[\033[01;31m\]\h \[\033[01;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[01;32m\]:)'; else echo '\[\033[01;31m\]:('; fi\` \[\033[00m\]\$ "
+}
+
+umask 022
+
+# You may uncomment the following lines if you want `ls' to be colorized:
+export LS_OPTIONS='--color=auto'
+eval "`dircolors`"
+alias ls='ls $LS_OPTIONS'
+alias l='ls $LS_OPTIONS -l'
+alias la='ls $LS_OPTIONS -lA'
+alias grep='grep --color=auto'
+alias pwdgen='echo $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c20)'
+
+#
+# Some more alias to avoid making mistakes:
+# alias rm='rm -i'
+# alias cp='cp -i'
+# alias mv='mv -i'
+
+case $- in
+*i*)    # interactive shell
+
+echo -e "Debian \033[1m$(cat /etc/debian_version)\033[0m"
+
+echo
+systemctl status | head -n 4
+echo
+
+;;
+*)      # non-interactive shell
+;;
+# (Courtesy of "UNIX F.A.Q.," 1993)
+esac
