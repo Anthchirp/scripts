@@ -13,7 +13,7 @@ EOF
 fi
 
 apt-get update
-apt-get install openssh-server vim git rsync
+apt-get install openssh-server vim git rsync telnet
 
 if [ ! -e ~/scripts ]; then
   cd ~
@@ -25,3 +25,7 @@ fi
 
 cd ~/scripts
 ./update-ssh-keys.sh
+./setup-bashrc.sh
+./setup-gitconfig.sh
+
+update-alternatives --set editor /usr/bin/vim.basic
