@@ -13,7 +13,7 @@ EOF
 fi
 
 apt-get update
-apt-get install openssh-server vim git rsync telnet
+apt-get install openssh-server vim git rsync telnet screen
 
 if [ ! -e ~/scripts ]; then
   cd ~
