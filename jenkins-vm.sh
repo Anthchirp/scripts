@@ -39,7 +39,7 @@ rm /etc/update-motd.d/{10,60}-*
 sed -i 's/Welcome to %s/Welcome to \\033[1m%s\\033[0m/' /etc/update-motd.d/00-*
 
 for bashrc in /home/jenkins/.bashrc /root/.bashrc; do
-cat <<EOF >>$bashrc
+cat <<'EOF' >>$bashrc
 
 function __ps1_git () {
  # preserve exit status
@@ -99,13 +99,13 @@ function __ps1_git () {
 EOF
 done
 
-cat <<EOF >>/home/jenkins/.bashrc
+cat <<'EOF' >>/home/jenkins/.bashrc
 PS1="\[\033[1;35m\]\h \[\033[1;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[1;32m\]:)'; else echo '\[\033[1;31m\]:('; fi\` \`__ps1_git\`\[\033[0m\]\$ "
 function gitoff () {
  PS1="\[\033[1;35m\]\h \[\033[1;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[1;32m\]:)'; else echo '\[\033[1;31m\]:('; fi\` \[\033[0m\]\$ "
 }
 EOF
-cat <<EOF >>/root/.bashrc
+cat <<'EOF' >>/root/.bashrc
 PS1="\[\033[1;31m\]\h \[\033[1;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[1;32m\]:)'; else echo '\[\033[1;31m\]:('; fi\` \`__ps1_git\`\[\033[0m\]\$ "
 function gitoff () {
  PS1="\[\033[1;31m\]\h \[\033[1;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[1;32m\]:)'; else echo '\[\033[1;31m\]:('; fi\` \[\033[0m\]\$ "
