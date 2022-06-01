@@ -32,7 +32,6 @@ apt-get install \
     make \
     nano \
     open-vm-tools \
-    python3-pip \
     vim \
     -y
 snap refresh
@@ -119,5 +118,35 @@ function gitoff () {
  PS1="\[\033[1;31m\]\h \[\033[1;34m\]\W \`if [ \$? = 0 ]; then echo '\[\033[1;32m\]:)'; else echo '\[\033[1;31m\]:('; fi\` \[\033[0m\]\$ "
 }
 EOF
+
+# Install various Python versions using micromamba
+cd /home/jenkins
+cat <<'EOF' > install-python-environments
+#!/bin/bash
+set -eux
+cd /home/jenkins
+rm -rf micromamba
+if [ ! -x bin/micromamba ]; then
+curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
+fi
+PATH=/home/jenkins/bin:$PATH
+micromamba create -y -n python37 -c conda-forge python=3.7
+micromamba create -y -n python38 -c conda-forge python=3.8
+micromamba create -y -n python39 -c conda-forge python=3.9
+micromamba create -y -n python310 -c conda-forge python=3.10 conda-wrappers
+
+# One installation of conda-wrappers is enough to generate all wrappers
+set +ux
+eval "$(micromamba shell hook --shell=bash)"
+micromamba activate python310
+set -ux
+create-wrappers -t conda -f python3.7 --conda-env-dir ~/micromamba/envs/python37 -d ~/bin --use-exec --inline
+create-wrappers -t conda -f python3.8 --conda-env-dir ~/micromamba/envs/python38 -d ~/bin --use-exec --inline
+create-wrappers -t conda -f python3.9 --conda-env-dir ~/micromamba/envs/python39 -d ~/bin --use-exec --inline
+create-wrappers -t conda -f python3.10 --conda-env-dir ~/micromamba/envs/python310 -d ~/bin --use-exec --inline
+EOF
+chmod +x install-python-environments
+chown jenkins.jenkins install-python-environments
+su -c - jenkins ./install-python-environments
 
 reboot
