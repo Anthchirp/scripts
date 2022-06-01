@@ -15,6 +15,7 @@ mkdir /jenkins/workspace
 chown jenkins.jenkins /jenkins/workspace
 
 # Update system and install useful packages
+export NEEDRESTART_SUSPEND=1
 apt-get update -y
 apt-get dist-upgrade -y
 apt-get install \
@@ -111,3 +112,4 @@ function gitoff () {
 }
 EOF
 
+reboot
