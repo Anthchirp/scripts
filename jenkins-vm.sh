@@ -11,8 +11,15 @@ tune2fs -m 1 $(findmnt -nuT / --output=source)
 
 # Set up Jenkins workspace
 ln /home/jenkins /jenkins -s
-mkdir /jenkins/workspace
+mkdir -p /jenkins/workspace
 chown jenkins.jenkins /jenkins/workspace
+
+# Set up Jenkins SSH key
+mkdir -p /home/jenkins/.ssh
+echo no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBfj+MX42Y9TW8Tg0qM6TCudkFPICst4Y3P4FbANXy4U jenkins@jenkins-controller > /home/jenkins/.ssh/authorized_keys2
+chown -R jenkins.jenkins /home/jenkins/.ssh
+chmod 755 /home/jenkins/.ssh
+chmod 644 /home/jenkins/.ssh/authorized_keys2
 
 # Update system and install useful packages
 export NEEDRESTART_SUSPEND=1
@@ -28,6 +35,7 @@ apt-get install \
     python3-pip \
     vim \
     -y
+snap refresh
 
 # Install earthly
 wget https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64 -O /usr/local/bin/earthly
