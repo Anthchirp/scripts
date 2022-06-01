@@ -38,6 +38,12 @@ apt-get install \
     -y
 snap refresh
 
+# Enable docker for Jenkins user
+addgroup --system docker
+adduser jenkins docker
+snap disable docker
+snap enable docker
+
 # Install earthly
 wget https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64 -O /usr/local/bin/earthly
 chmod +x /usr/local/bin/earthly
