@@ -153,4 +153,5 @@ sed -i '1s;^;export PATH=/home/jenkins/bin:$PATH\n;' /home/jenkins/.bashrc
 # this needs prepending as the ubuntu ~/.bashrc bails on non-interactive
 # invocation, and Jenkins does not source ~/.profile
 
-reboot
+# Installation complete. Switch machine off for template cloning
+poweroff
