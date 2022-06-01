@@ -29,6 +29,8 @@ apt-get install \
     build-essential \
     default-jre-headless \
     git \
+    libldap2-dev \
+    libsasl2-dev \
     make \
     nano \
     open-vm-tools \
