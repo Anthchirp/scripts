@@ -149,4 +149,8 @@ chmod +x install-python-environments
 chown jenkins.jenkins install-python-environments
 su -c - jenkins ./install-python-environments
 
+sed -i '1s;^;export PATH=/home/jenkins/bin:$PATH\n;' /home/jenkins/.bashrc
+# this needs prepending as the ubuntu ~/.bashrc bails on non-interactive
+# invocation, and Jenkins does not source ~/.profile
+
 reboot
