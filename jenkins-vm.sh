@@ -27,7 +27,7 @@ chmod 644 /home/jenkins/.ssh/authorized_keys2
 
 # Update system and install useful packages
 export NEEDRESTART_SUSPEND=1
-apt-get update -y
+apt update -y
 apt dist-upgrade -y
 apt install \
     build-essential \
