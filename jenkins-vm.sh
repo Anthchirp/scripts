@@ -1,18 +1,22 @@
 #!/bin/bash
 set -eux
 
+# Force an NTP sync to make sure the system time is correct. This
+# avoids certificate errors during the installation if we run off
+# a VMWare snapshot or template.
+timedatectl set-ntp off
+timedatectl set-ntp on
+
 # Increase swap file to 8GB
 swapoff -a
 fallocate -l 8G /swap.img
 mkswap /swap.img
 
-# Allow / to fill up to 99%
+# Allow the root filesystem to fill up to 99%
 tune2fs -m 1 $(findmnt -nuT / --output=source)
 
-# Set up Jenkins workspace
-ln /home/jenkins /jenkins -s
-mkdir -p /jenkins/workspace
-chown jenkins.jenkins /jenkins/workspace
+# Set up a Jenkins directory link in root
+ln /home/jenkins /jenkins -nsf
 
 # Set up Jenkins SSH key
 mkdir -p /home/jenkins/.ssh
