@@ -24,9 +24,10 @@ chmod 644 /home/jenkins/.ssh/authorized_keys2
 # Update system and install useful packages
 export NEEDRESTART_SUSPEND=1
 apt-get update -y
-apt-get dist-upgrade -y
-apt-get install \
+apt dist-upgrade -y
+apt install \
     build-essential \
+    chromium-chromedriver \
     default-jre-headless \
     git \
     libldap2-dev \
