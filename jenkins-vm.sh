@@ -144,7 +144,7 @@ curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/mi
 fi
 PATH=/home/jenkins/bin:$PATH
 micromamba create -y -n python37 -c conda-forge python=3.7
-micromamba create -y -n python38 -c conda-forge python=3.8
+micromamba create -y -n python38 -c conda-forge python==3.8.10
 micromamba create -y -n python39 -c conda-forge python=3.9
 micromamba create -y -n python310 -c conda-forge python=3.10 conda-wrappers
 
